@@ -1,3 +1,17 @@
+# Concept 
+Java Springboot API that mimmics the site [c.ai](https://character.ai/).
+
+# Features
+- User accounts of different types (basic, premium).
+- Custom Character Creation (allow users to create and customize their own AI personas with adjustable traits, backgrounds, and styles).
+- Conversations with multiple characters.
+- Multi-Language Conversations (the AI personas are able to converse in different languages).
+- Memory Retention (saving the chats the user had).
+- Emotion and Tone Modulation (enable the AI to adjust its tone based on user sentiment, creating more empathetic or dynamic conversations).
+- Scenario Modes (themed modes - e.g., adventure, mystery, romance - that set the stage for more dynamic interactions).
+- Character Sharing and Discovery (a marketplace where users can share and discover new AI characters).
+- Premium Features (unlimited characters through subscription models).
+
 # Prerequisites
 
 For using Github Codespaces, no prerequisites are mandatory.
