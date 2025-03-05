@@ -17,6 +17,7 @@ public class HelloApplication {
 	private InformationRepository informationRepository;
 
 	public static void main(String[] args) {
+		//to do change me
 		SpringApplication.run(HelloApplication.class, args);
 	}
 
