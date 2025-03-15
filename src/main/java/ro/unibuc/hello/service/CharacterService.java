@@ -1,4 +1,4 @@
-package main.java.ro.unibuc.hello.service;
+package ro.unibuc.hello.service;
 
 import ro.unibuc.hello.data.Character;
 import ro.unibuc.hello.data.CharacterRepository;

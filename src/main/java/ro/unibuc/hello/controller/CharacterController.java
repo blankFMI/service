@@ -1,4 +1,4 @@
-package main.java.ro.unibuc.hello.controller;
+package ro.unibuc.hello.controller;
 
 import ro.unibuc.hello.data.Character;
 import ro.unibuc.hello.service.CharacterService;

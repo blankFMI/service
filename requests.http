@@ -50,4 +50,24 @@ Content-Type: application/json
 DELETE http://localhost:8080/greetings/{{deleteGreetingId}}
 
 
-# TODO add requests for your own endpoints!
+# TODO somehow orginese requests
+###
+POST http://localhost:8080/characters
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "background": "A cunning detective from the 1920s",
+  "style": "mysterious"
+}
+
+### Create Basic User
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "basicUser",
+  "email": "basic@example.com",
+  "password": "basicPass",
+  "accountType": "BASIC"
+}
