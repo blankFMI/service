@@ -1,0 +1,40 @@
+### Create a New User
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "accountType": "BASIC"
+}
+
+### Retrieve All Users
+GET http://localhost:8080/users
+Content-Type: application/json
+
+
+### User Login
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "password": "password123"
+}
+
+### Update an Existing User
+# Replace {id} with the actual user ID (e.g., "12345")
+PUT http://localhost:8080/users/{id}
+Content-Type: application/json
+
+{
+  "username": "john_updated",
+  "email": "john_updated@example.com",
+  "password": "newpassword123",
+  "accountType": "PREMIUM"
+}
+
+### Delete a User
+# Replace {id} with the actual user ID (e.g., "12345")
+DELETE http://localhost:8080/users/{id}

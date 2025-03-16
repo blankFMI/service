@@ -1,4 +1,3 @@
-
 # You can use this file to easily send requests to your API.
 # Prerequisite: humao.rest-client Vscode plugin (already present on codespace)
 # High-level overview of REST API concepts used here: https://www.packtpub.com/en-us/learning/how-to-tutorials/what-are-rest-verbs-and-status-codes-tutorial?srsltid=AfmBOoppDqtkhRxj5BLZONRZFzRDmh6eP-xyTo6H4OuEHYuVbrg1d4Dm
@@ -48,44 +47,3 @@ Content-Type: application/json
 ### Delete greeting
 @deleteGreetingId = 1001
 DELETE http://localhost:8080/greetings/{{deleteGreetingId}}
-
-
-# TODO somehow orginese requests
-### Create A simple characther
-POST http://localhost:8080/characters
-Content-Type: application/json
-
-{
-  "name": "Alice",
-  "background": "A cunning detective from the 1920s",
-  "style": "mysterious"
-}
-
-### Personality added
-POST http://localhost:8080/characters
-Content-Type: application/json
-
-{
-  "name": "Alice",
-  "background": "A cunning detective from the 1920s",
-  "style": "mysterious",
-  "personality": "charming and witty"
-}
-
-
-### Get All Characters
-GET http://localhost:8080/characters
-Accept: application/json
-
-
-
-### Create Basic User
-POST http://localhost:8080/users
-Content-Type: application/json
-
-{
-  "username": "basicUser",
-  "email": "basic@example.com",
-  "password": "basicPass",
-  "accountType": "BASIC"
-}
