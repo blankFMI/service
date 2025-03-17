@@ -1,0 +1,25 @@
+#POST /conversations/start
+
+### Start a new conversation
+POST http://localhost:8080/conversations/start?userId=user123&characterId=char456
+Content-Type: application/json
+
+
+
+# POST /conversations/{conversationId}/messages
+# Replace {conversationId} with the actual conversation ID from the previous step.
+
+###Add message to conversation
+POST http://localhost:8080/conversations/60d21b4667d0d8992e610c85/messages?sender=user&content=Hello%20there!
+Content-Type: application/json
+
+
+
+# This endpoint retrieves the last 20 messages, calls the external API (Deepseek), and appends the API response to the conversation.
+
+# Endpoint:
+# POST /conversations/{conversationId}/process
+
+###Process the conversation
+POST http://localhost:8080/conversations/60d21b4667d0d8992e610c85/process
+Content-Type: application/json

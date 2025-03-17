@@ -1,0 +1,37 @@
+package ro.unibuc.hello.data;
+
+import java.time.LocalDateTime;
+
+public class Message {
+    private String sender; // "user" or "character"
+    private String content;
+    private LocalDateTime timestamp;
+
+    public Message() {}
+
+    public Message(String sender, String content, LocalDateTime timestamp) {
+        this.sender = sender;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
+
+    // Getters and Setters
+    public String getSender() {
+        return sender;
+    }
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+}
