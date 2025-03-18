@@ -25,5 +25,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    
     // Additional methods (find by ID, update, delete, etc.) can be added later.
 }
