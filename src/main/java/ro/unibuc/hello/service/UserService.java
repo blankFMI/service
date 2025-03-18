@@ -25,6 +25,38 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User updateUser(String id, User updatedUser) {
+        return userRepository.findById(id).map(existingUser -> {
+            if (updatedUser.getUsername() != null) {
+                existingUser.setUsername(updatedUser.getUsername());
+            }
+            if (updatedUser.getEmail() != null) {
+                existingUser.setEmail(updatedUser.getEmail());
+            }
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                // For demo purposes, storing plain text; in production, hash the password!
+                existingUser.setPassword(updatedUser.getPassword());
+            }
+            if (updatedUser.getAccountType() != null) {
+                existingUser.setAccountType(updatedUser.getAccountType());
+            }
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+    
+    public User getUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    // New method to delete a user by id
+    public void deleteUser(String id) {
+        // Optionally check if user exists before deleting
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
     
     // Additional methods (find by ID, update, delete, etc.) can be added later.
 }
