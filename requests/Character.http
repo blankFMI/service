@@ -1,0 +1,26 @@
+# TODO somehow orginese requests
+### Create A simple characther
+POST http://localhost:8080/characters
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "background": "A cunning detective from the 1920s",
+  "style": "mysterious"
+}
+
+### Personality added
+POST http://localhost:8080/characters
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "background": "A cunning detective from the 1920s",
+  "style": "mysterious",
+  "personality": "charming and witty"
+}
+
+
+### Get All Characters
+GET http://localhost:8080/characters
+Accept: application/json

@@ -1,0 +1,10 @@
+### Create Basic User
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "basicUser",
+  "email": "basic@example.com",
+  "password": "basicPass",
+  "accountType": "BASIC"
+}
