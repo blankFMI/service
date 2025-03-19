@@ -1,0 +1,10 @@
+###
+POST http://localhost:8080/conversations/talk HTTP/1.1
+Content-Type: application/json
+
+{
+  "conversationId": null,
+  "userId": "67da5d115e6caf1826497beb",
+  "characterId": "67d880d3ad766f2eb43bd07e",
+  "message": "Bună, ce mai faci astăzi?"
+}

@@ -23,7 +23,7 @@ public class TokenValidationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // Skip token validation for login and public endpoints
         String path = request.getRequestURI();
-        if (path.startsWith("/auth/login") || path.startsWith("/public") || path.startsWith("/users") || path.startsWith("/characters") || path.startsWith("/hello-world") || path.startsWith("/info") || path.startsWith("/greetings")) {
+        if (path.startsWith("/auth/login") || path.startsWith("/public") || path.startsWith("/users") || path.startsWith("/characters") || path.startsWith("/hello-world") || path.startsWith("/info") || path.startsWith("/greetings") || path.startsWith("/conversations")) {
             filterChain.doFilter(request, response);
             return;
         }

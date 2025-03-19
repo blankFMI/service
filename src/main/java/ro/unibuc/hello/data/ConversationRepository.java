@@ -2,13 +2,9 @@ package ro.unibuc.hello.data;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ConversationRepository extends MongoRepository<Conversation, String> {
-    // Find all conversations for a given user
-    List<Conversation> findByUserId(String userId);
-    
-    // Find all conversations for a given character
-    List<Conversation> findByCharacterId(String characterId);
+    Optional<Conversation> findByUserIdAndCharacterId(String userId, String characterId);
 }
