@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class DeepseekService {
@@ -34,6 +35,14 @@ public class DeepseekService {
         headers.set("Authorization", "Bearer " + apiKey);
 
         HttpEntity<DeepseekRequest> entity = new HttpEntity<>(request, headers);
-        return restTemplate.postForObject(url, entity, DeepseekResponse.class);
+        String rawResponse = restTemplate.postForObject(url, entity, String.class);
+        System.out.println("Raw Deepseek API response: " + rawResponse);
+        
+        try {
+            DeepseekResponse response = new ObjectMapper().readValue(rawResponse, DeepseekResponse.class);
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse Deepseek response", e);
+        }
     }
 }
