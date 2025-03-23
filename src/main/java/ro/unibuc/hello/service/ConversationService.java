@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Service
 public class ConversationService {
@@ -47,8 +48,9 @@ public class ConversationService {
             conversation = new Conversation(request.getUserId(), request.getCharacterId());
         }
 
-        // 3. Add the new user message to the conversation.
-        Message userMessage = new Message("user", LocalDateTime.now(), request.getMessage());
+        // Join messages provided in the array into one string
+        String userMessageContent = String.join(" ", request.getMessage());
+        Message userMessage = new Message("user", LocalDateTime.now(), userMessageContent);
         conversation.getMessages().add(userMessage);
 
         // 4. Extract the last 20 messages (or fewer).
@@ -67,10 +69,14 @@ public class ConversationService {
         String template = "You are " + characterData + " based on this conversation: " + context + ". What is your response?";
 
         // 7. Create a DeepseekRequest payload.
-        DeepseekRequest deepseekRequest = new DeepseekRequest();
-        deepseekRequest.setPersonality(character.getPersonality());
-        deepseekRequest.setBackground(character.getBackground());
-        deepseekRequest.setContext(template);
+        DeepseekRequest deepseekRequest = new DeepseekRequest(); 
+        deepseekRequest.setPersonality(character.getPersonality()); 
+        deepseekRequest.setBackground(character.getBackground()); 
+        deepseekRequest.setContext(template); 
+        // Instead of a plain string, send a Message object with sender "user" and null timestamp
+        deepseekRequest.setMessages(Collections.singletonList(
+            new Message("user", null, context)
+        ));
 
         // 8. Call DeepseekService to get the character's reply.
         DeepseekResponse deepseekResponse;

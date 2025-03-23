@@ -1,8 +1,10 @@
 package ro.unibuc.hello.data;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Message {
+    @JsonProperty("role")
     private String sender;       // "user" or "character"
     private LocalDateTime timestamp;
     private String content;
@@ -18,10 +20,12 @@ public class Message {
 
     // Getters and setters
 
+    @JsonProperty("role")
     public String getSender() {
         return sender;
     }
 
+    @JsonProperty("role")
     public void setSender(String sender) {
         this.sender = sender;
     }

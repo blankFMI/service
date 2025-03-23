@@ -21,12 +21,17 @@ public class DeepseekService {
     }
 
     public DeepseekResponse getCharacterResponse(DeepseekRequest request) {
+        // Ensure `messages` is a List<String> before sending the request
+        if (request.getMessages() == null || request.getMessages().isEmpty()) {
+            throw new IllegalArgumentException("Messages field must not be null or empty");
+        }
+
         // Adjust the endpoint path as needed
         String url = baseUrl + "/v1/chat/completions";
         // Prepare headers including the API key
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("X-API-Key", apiKey); // Adjust header name based on Deepseek's docs
+        headers.set("Authorization", "Bearer " + apiKey);
 
         HttpEntity<DeepseekRequest> entity = new HttpEntity<>(request, headers);
         return restTemplate.postForObject(url, entity, DeepseekResponse.class);
