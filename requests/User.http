@@ -1,7 +1,6 @@
 ### Create Basic User
 POST http://localhost:8080/users
 Content-Type: application/json
-
 {
   "username": "basicUser",
   "email": "basic@example.com",
@@ -13,15 +12,14 @@ GET http://localhost:8080/users HTTP/1.1
 Authorization: Bearer c9c3f1b4-8d11-48d4-be40-1d5f80e94b3b
 Content-Type: application/json
 
-
 ###Login as Basic User
 POST http://localhost:8080/auth/login
 Content-Type: application/json
-
 {
   "username": "basicUser",
   "password": "basicPass"
 }
+
 ###Logout as Basic User
 POST http://localhost:8080/auth/logout HTTP/1.1
 Authorization: Bearer 89b27ebe-9e4c-4a34-9f60-71e7bb926850
@@ -37,7 +35,6 @@ Content-Type: application/json
 ###Update Basic User
 PUT http://localhost:8080/users/67d9b70f8d32ee6a4ba2424f
 Content-Type: application/json
-
 {
   "username": "newUsername",
   "email": "newemail@example.com",

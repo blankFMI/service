@@ -35,14 +35,11 @@ public class DeepseekService {
         headers.set("Authorization", "Bearer " + apiKey);
 
         HttpEntity<DeepseekRequest> entity = new HttpEntity<>(request, headers);
+        // Get the raw JSON response as a String
         String rawResponse = restTemplate.postForObject(url, entity, String.class);
-        System.out.println("Raw Deepseek API response: " + rawResponse);
         
-        try {
-            DeepseekResponse response = new ObjectMapper().readValue(rawResponse, DeepseekResponse.class);
-            return response;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse Deepseek response", e);
-        }
+        // Output the raw response
+        System.out.println("Raw Deepseek API response: " + rawResponse);
+        return restTemplate.postForObject(url, entity, DeepseekResponse.class);
     }
 }

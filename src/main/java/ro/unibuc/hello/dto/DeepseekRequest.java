@@ -6,9 +6,9 @@ import java.util.List;
 public class DeepseekRequest {
     private String personality;
     private String background;
-    private String context; // e.g., last 20 messages concatenated
+    private String context;
     private List<Message> messages;
-    private String model = "deepseek-chat"; 
+    private String model = "deepseek-chat";
 
     public DeepseekRequest() { }
 
@@ -19,7 +19,6 @@ public class DeepseekRequest {
         this.messages = messages;
     }
 
-    // Getters and setters...
     public String getPersonality() {
         return personality;
     }
@@ -44,8 +43,6 @@ public class DeepseekRequest {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
-
-    // New getter and setter for model
     public String getModel() {
         return model;
     }

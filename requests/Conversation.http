@@ -5,6 +5,7 @@ Content-Type: application/json
 {
   "conversationId": null,
   "userId": "67da5d115e6caf1826497beb",
-  "characterId": "67d880d3ad766f2eb43bd07e",
+  "characterId": "67d880d3ad766f2 eb43bd07e",
   "message": ["user: Bună, ce mai faci astăzi?"]
 }
+### de pus requesturi mai multe pentru a testa mai multe cazuri
