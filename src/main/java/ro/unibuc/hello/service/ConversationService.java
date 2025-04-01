@@ -61,9 +61,9 @@ public class ConversationService {
 
         // 6. Build a template string using character data + recent conversation.
         String characterData = character.getPersonality() + " " + character.getBackground();
-        String template = "You are " + characterData + " based on this conversation:\n"
+        ;
+String template = "You are " + characterData + " based on this conversation:\n"
                 + context + "\nWhat is your response? \nRespond in the language the conversation is in.";
-
         // 7. Prepare the DeepseekRequest.
         DeepseekRequest deepseekRequest = new DeepseekRequest();
         deepseekRequest.setPersonality(character.getPersonality());
