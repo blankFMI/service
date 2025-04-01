@@ -43,6 +43,40 @@ public class UserService {
             return userRepository.save(existingUser);
         }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
+
+    public User updateUser2(String id, User updatedUser) {
+        return userRepository.findById(id).map(existingUser -> {
+            if (updatedUser.getUsername() != null) {
+                existingUser.setUsername(updatedUser.getUsername());
+            }
+            if (updatedUser.getEmail() != null) {
+                existingUser.setEmail(updatedUser.getEmail());
+            }
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                // For demo purposes, storing plain text; in production, hash the password!
+                existingUser.setPassword(updatedUser.getPassword());
+            }
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    public User upgradeUser(String id, User upgratedUser) {
+        return userRepository.findById(id).map(existingUser -> {
+            if (upgratedUser.getAccountType() != null) {
+                existingUser.setAccountType(upgratedUser.getAccountType());
+            }
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    public User downgradeUser(String id, User downgratedUser) {
+        return userRepository.findById(id).map(existingUser -> {
+            if (downgratedUser.getAccountType() != null) {
+                existingUser.setAccountType(downgratedUser.getAccountType());
+            }
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
     
     public User getUserById(String id) {
         return userRepository.findById(id)

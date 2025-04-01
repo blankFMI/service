@@ -1,13 +1,26 @@
 ### Create Basic User
 POST http://localhost:8080/users
 Content-Type: application/json
+
 {
   "username": "basicUser",
   "email": "basic@example.com",
   "password": "basicPass",
   "accountType": "BASIC"
 }
-### get all users
+
+### Create Premium User
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "premiumUser",
+  "email": "premium@example.com",
+  "password": "premiumPass",
+"accountType": "PREMIUM"
+}
+
+###Get all users
 GET http://localhost:8080/users HTTP/1.1
 Authorization: Bearer c9c3f1b4-8d11-48d4-be40-1d5f80e94b3b
 Content-Type: application/json
@@ -15,9 +28,19 @@ Content-Type: application/json
 ###Login as Basic User
 POST http://localhost:8080/auth/login
 Content-Type: application/json
+
 {
   "username": "basicUser",
   "password": "basicPass"
+}
+
+###Login as Premium User
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "premiumUser",
+  "password": "premiumPass"
 }
 
 ###Logout as Basic User
@@ -25,6 +48,10 @@ POST http://localhost:8080/auth/logout HTTP/1.1
 Authorization: Bearer 89b27ebe-9e4c-4a34-9f60-71e7bb926850
 Content-Type: application/json
 
+###Logout as Premium User
+POST http://localhost:8080/auth/logout HTTP/1.1
+Authorization: Bearer bee7ad2d-def3-477f-adb1-4ba919ea370e
+Content-Type: application/json
 
 ### Get Secure Data
 GET http://localhost:8080/auth/secure-data HTTP/1.1
@@ -33,13 +60,40 @@ Content-Type: application/json
 
 
 ###Update Basic User
-PUT http://localhost:8080/users/67d9b70f8d32ee6a4ba2424f
+PUT http://localhost:8080/users/67ec2e4811d90b6599f7a133
 Content-Type: application/json
+
 {
   "username": "newUsername",
   "email": "newemail@example.com",
   "password": "newPassword",
   "accountType": "PREMIUM"
+}
+
+###Update User
+PUT http://localhost:8080/users/67ec34a211d90b6599f7a135
+Content-Type: application/json
+
+{
+  "username": "newUsername2",
+  "email": "newemail@example.com",
+  "password": "newPassword"
+}
+
+###Upgrade User from Basic to Premium
+PUT http://localhost:8080/users/67ec2e4811d90b6599f7a133
+Content-Type: application/json
+
+{
+  "accountType": "PREMIUM"
+}
+
+###Downgrade User from Premium to Basic
+PUT http://localhost:8080/users/67e3c12820ff021d7d4ed287
+Content-Type: application/json
+
+{
+  "accountType": "BASIC"
 }
 
 ### Login as Updated User
@@ -52,5 +106,5 @@ Content-Type: application/json
 }
 
 ### Delete User
-DELETE http://localhost:8080/users/67d9b70f8d32ee6a4ba2424f
+DELETE http://localhost:8080/users/67ec34a211d90b6599f7a135
 Content-Type: application/json
