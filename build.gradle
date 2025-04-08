@@ -55,6 +55,9 @@ dependencies {
 	testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
 	testImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
 	testImplementation "io.cucumber:cucumber-spring:$cucumberVersion"
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 dependencyManagement {
@@ -69,6 +72,8 @@ test {
 		excludeTags ("IntegrationTest", "E2E")
 	}
 	finalizedBy jacocoTestReport
+	useJUnitPlatform()
+
 }
 
 jacocoTestReport {
