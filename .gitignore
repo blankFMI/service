@@ -43,3 +43,4 @@ infrastructure/prometheus/durable
 
 ### Durable Loki store
 infrastructure/loki/durable/
+.qodo
