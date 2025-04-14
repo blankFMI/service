@@ -57,4 +57,48 @@ class DeepseekResponseTest {
         response.setReply("Updated reply");
         assertEquals("Updated reply", response.getReply(), "Expected the message content to be updated");
     }
+
+    @Test
+    void testGettersAndSettersForBasicFields() {
+        DeepseekResponse response = new DeepseekResponse();
+        response.setId("1234");
+        response.setObject("chat.completion");
+        response.setCreated(1678901234L);
+        response.setModel("deepseek-model-v1");
+        response.setSystem_fingerprint("fp-test");
+
+        assertEquals("1234", response.getId());
+        assertEquals("chat.completion", response.getObject());
+        assertEquals(1678901234L, response.getCreated());
+        assertEquals("deepseek-model-v1", response.getModel());
+        assertEquals("fp-test", response.getSystem_fingerprint());
+    }
+
+    @Test
+    void testUsageObjectSetAndGet() {
+        DeepseekResponse response = new DeepseekResponse();
+        DeepseekResponse.Usage usage = new DeepseekResponse.Usage();
+
+        usage.setPrompt_tokens(100);
+        usage.setCompletion_tokens(50);
+        usage.setTotal_tokens(150);
+        usage.setPrompt_cache_hit_tokens(80);
+        usage.setPrompt_cache_miss_tokens(20);
+
+        DeepseekResponse.PromptTokensDetails details = new DeepseekResponse.PromptTokensDetails();
+        details.setCached_tokens(60);
+        usage.setPrompt_tokens_details(details);
+
+        response.setUsage(usage);
+
+        assertNotNull(response.getUsage());
+        assertEquals(100, response.getUsage().getPrompt_tokens());
+        assertEquals(50, response.getUsage().getCompletion_tokens());
+        assertEquals(150, response.getUsage().getTotal_tokens());
+        assertEquals(80, response.getUsage().getPrompt_cache_hit_tokens());
+        assertEquals(20, response.getUsage().getPrompt_cache_miss_tokens());
+        assertEquals(60, response.getUsage().getPrompt_tokens_details().getCached_tokens());
+    }
+
+
 }

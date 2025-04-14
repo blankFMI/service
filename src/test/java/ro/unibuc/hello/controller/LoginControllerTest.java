@@ -2,7 +2,7 @@ package ro.unibuc.hello.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+// import org.mockito.Mockito;
 import ro.unibuc.hello.data.User;
 import ro.unibuc.hello.dto.LoginRequest;
 import ro.unibuc.hello.dto.LoginResponse;

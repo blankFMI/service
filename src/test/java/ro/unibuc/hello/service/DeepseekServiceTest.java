@@ -8,7 +8,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import ro.unibuc.hello.dto.DeepseekRequest;
 import ro.unibuc.hello.dto.DeepseekResponse;
-import ro.unibuc.hello.data.Message; // Corrected import for Message
+import ro.unibuc.hello.data.Message; 
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,31 +44,6 @@ class DeepseekServiceTest {
         };
     }
 
-    // @Test
-    // void testGetCharacterResponse_Success() throws Exception {
-    //     // Arrange
-    //     DeepseekRequest request = new DeepseekRequest();
-    //     // Instantiate Message with appropriate arguments: content, timestamp, and sender identifier
-    //     request.setMessages(List.of(new Message("Hello", LocalDateTime.now(), "user")));
-
-    //     DeepseekResponse mockResponse = new DeepseekResponse();
-    //     mockResponse.setReply("Hi there!");
-
-    //     String expectedUrl = "https://api.deepseek.com/v1/chat/completions";
-
-    //     mockServer.expect(requestTo(expectedUrl))
-    //               .andExpect(method(HttpMethod.POST))
-    //               .andRespond(withSuccess(objectMapper.writeValueAsString(mockResponse), MediaType.APPLICATION_JSON));
-
-    //     // Act
-    //     DeepseekResponse response = deepseekService.getCharacterResponse(request);
-
-    //     // Assert
-    //     assertNotNull(response);
-    //     assertEquals("Hi there!", response.getReply());
-    //     mockServer.verify();
-    // }
-
     @Test
     void testGetCharacterResponse_EmptyMessages_ThrowsException() {
         // Arrange
@@ -79,4 +54,6 @@ class DeepseekServiceTest {
             deepseekService.getCharacterResponse(request);
         });
     }
+
+    
 }

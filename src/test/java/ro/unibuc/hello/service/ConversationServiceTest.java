@@ -10,10 +10,12 @@ import ro.unibuc.hello.dto.ConversationRequest;
 import ro.unibuc.hello.dto.ConversationResponse;
 import ro.unibuc.hello.dto.DeepseekResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ConversationServiceTest {
@@ -109,4 +111,49 @@ class ConversationServiceTest {
         Exception ex = assertThrows(RuntimeException.class, () -> conversationService.converse(request));
         assertTrue(ex.getMessage().contains("Deepseek API call failed"));
     }
+
+    @Test
+    void testConverse_Successful() {
+        // Arrange
+        ro.unibuc.hello.data.Character character = new ro.unibuc.hello.data.Character();
+        character.setPersonality("Friendly");
+        character.setBackground("Lives in the forest");
+
+        Conversation conversation = new Conversation("user1", "char1");
+
+        ConversationRequest request = new ConversationRequest();
+        request.setCharacterId("char1");
+        request.setUserId("user1");
+        request.setMessage(List.of("Hello!", "How are you?"));
+
+        // Fix: ensure getReply() returns the expected string
+        DeepseekResponse response = mock(DeepseekResponse.class);
+        when(response.getReply()).thenReturn("I'm good, thank you!");
+
+        when(characterRepository.findById("char1")).thenReturn(Optional.of(character));
+        when(conversationRepository.findByUserIdAndCharacterId("user1", "char1"))
+                .thenReturn(Optional.of(conversation));
+        when(deepseekService.getCharacterResponse(any())).thenReturn(response);
+
+        // Act
+        ConversationResponse result = conversationService.converse(request);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("I'm good, thank you!", result.getReply());
+
+        ArgumentCaptor<Conversation> captor = ArgumentCaptor.forClass(Conversation.class);
+        verify(conversationRepository).save(captor.capture());
+
+        Conversation saved = captor.getValue();
+        assertEquals(2, saved.getMessages().size());
+        assertTrue(saved.getContext().contains("Friendly"));
+        assertTrue(saved.getContext().contains("Hello!"));
+    }
+
+
+
+
+
+
 }
