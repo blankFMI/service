@@ -89,3 +89,11 @@ NOTE: for a live demo, please check out [this youtube video](https://youtu.be/-9
 * You can test other API endpoints using [requests.http](requests.http)
 * You can access the MongoDB Admin UI at:
   * http://localhost:8090 
+
+# Commands to clean up space
+
+    ```
+    docker system prune -a
+    docker volume prune
+    rm -rf ~/.gradle/caches
+    ```
