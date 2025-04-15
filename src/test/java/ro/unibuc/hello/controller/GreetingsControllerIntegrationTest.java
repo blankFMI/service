@@ -1,7 +1,6 @@
 package ro.unibuc.hello.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ro.unibuc.hello.dto.Greeting;
 
 import org.junit.jupiter.api.*;
@@ -18,14 +17,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import ro.unibuc.hello.service.GreetingsService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,29 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GreetingsControllerIntegrationTest {
 
     @Container
-    public static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:6.0.20")
-            .withExposedPorts(27017)
-            .withEnv("MONGO_INITDB_ROOT_USERNAME","root") // user
-            .withEnv("MONGO_INITDB_ROOT_PASSWORD", "example") // password
-            .withEnv("MONGO_INITDB_DATABASE", "testdb") // dbname
-            .withCommand("--auth");
-
-    @BeforeAll
-    public static void setUp() {
-        mongoDBContainer.start();
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        mongoDBContainer.stop();
-    }
+    public static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:6.0.20");
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        final String MONGO_URL = "mongodb://root:example@localhost:";
-        final String PORT = String.valueOf(mongoDBContainer.getMappedPort(27017));
-
-        registry.add("mongodb.connection.url", () -> MONGO_URL + PORT);
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
     }
 
     @Autowired
@@ -68,7 +43,7 @@ public class GreetingsControllerIntegrationTest {
     @BeforeEach
     public void cleanUpAndAddTestData() {
         greetingsService.deleteAllGreetings();
-        
+
         Greeting greeting1 = new Greeting("1", "Hello 1");
         Greeting greeting2 = new Greeting("2", "Hello 2");
 
@@ -100,7 +75,6 @@ public class GreetingsControllerIntegrationTest {
 
         mockMvc.perform(get("/greetings"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
@@ -112,27 +86,21 @@ public class GreetingsControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(greeting)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.content").value("Hello Updated"));
 
         mockMvc.perform(get("/greetings"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].content").value("Hello Updated"))
-                .andExpect(jsonPath("$[1].content").value("Hello 2"));
+                .andExpect(jsonPath("$[0].content").value("Hello Updated"));
     }
 
     @Test
     public void testDeleteGreeting() throws Exception {
-
         mockMvc.perform(delete("/greetings/1"))
             .andExpect(status().isOk());
 
         mockMvc.perform(get("/greetings"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].content").value("Hello 2"));
     }

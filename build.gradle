@@ -2,12 +2,14 @@ plugins {
 	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.asciidoctor.jvm.convert' version '2.4.0'
+	id 'io.freefair.lombok' version '8.12.2.1'
 	id 'java'
 	id 'jacoco'
 }
 
 group = 'ro.unibuc'
 version = '0.0.1-SNAPSHOT'
+
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
@@ -21,45 +23,59 @@ ext {
 	set('testcontainersVersion', "1.20.4")
 	set('junitVersion', "5.11.4")
 	set('cucumberVersion', "7.20.1")
+	set('jwtVersion', "0.12.6")
+	set('lombokVersion', "1.18.36")
+	set('aspectjVersion', "1.9.22.1")
 }
 
 dependencies {
-	// Spring & core
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	// --- Spring Core & Web ---
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.session:spring-session-core'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'org.springframework.data:spring-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.session:spring-session-core'
 	implementation 'commons-io:commons-io:2.18.0'
 	implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// Runtime
+	// --- Runtime ---
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
-	// Unit testing
+	// --- Unit Testing ---
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.11.4"
 
-	// Mockito & MongoDB test support
-	testImplementation 'org.mockito:mockito-core:4.0.0'
-	testImplementation 'org.mongodb:mongodb-driver-sync:5.0.1'
+	// --- AOP ---
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation "org.aspectj:aspectjrt:${aspectjVersion}"
+	implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
 
-	// Integration tests
+	// --- JWT ---
+	implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
+
+	// --- Lombok ---
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	// --- Integration Tests with TestContainers ---
 	testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
 	testImplementation "org.testcontainers:mongodb:${testcontainersVersion}"
 	testImplementation 'org.testcontainers:junit-jupiter'
 
-	// E2E tests with Cucumber
-	runtimeOnly "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+	// --- E2E with Cucumber ---
 	testImplementation "io.cucumber:cucumber-core:${cucumberVersion}"
 	testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
 	testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
 	testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
+	runtimeOnly "org.junit.vintage:junit-vintage-engine:${junitVersion}"
 }
 
 dependencyManagement {
@@ -69,6 +85,7 @@ dependencyManagement {
 }
 
 test {
+	description = "Runs unit tests only (excludes Integration and E2E)"
 	outputs.dir snippetsDir
 	useJUnitPlatform {
 		excludeTags "IntegrationTest", "E2E"
@@ -76,7 +93,7 @@ test {
 	finalizedBy jacocoTestReport
 
 	testLogging {
-		events "passed", "skipped", "failed", "started"
+		events "started", "passed", "skipped", "failed"
 		showStandardStreams = true
 	}
 }
@@ -90,6 +107,8 @@ jacocoTestReport {
 }
 
 task testIT(type: Test) {
+	group = "verification"
+	description = "Runs integration tests only"
 	outputs.dir snippetsDir
 	outputs.upToDateWhen { false }
 
@@ -108,19 +127,20 @@ configurations {
 	}
 }
 
-task testE2E() {
+task testE2E(type: JavaExec) {
+	group = "verification"
+	description = "Runs Cucumber E2E tests"
 	dependsOn assemble, testClasses
-	doLast {
-		providers.javaexec {
-			mainClass.set("io.cucumber.core.cli.Main")
-			classpath(configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output)
-			args([
-				'--plugin', 'pretty',
-				'--plugin', 'html:target/cucumber-report.html',
-				'--glue', 'ro.unibuc.hello.e2e.steps',
-				'src/test/resources'])
-		}
-	}
+
+	mainClass.set("io.cucumber.core.cli.Main")
+	classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+
+	args = [
+		'--plugin', 'pretty',
+		'--plugin', 'html:target/cucumber-report.html',
+		'--glue', 'ro.unibuc.hello.e2e.steps',
+		'src/test/resources'
+	]
 }
 
 asciidoctor {
