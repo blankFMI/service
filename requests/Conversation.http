@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "conversationId": null,
-  "userId": "67da5d115e6caf1826497beb",
-  "characterId": "67e3c066f7c9cb7d2ea0cdd7",
+  "userId": "6803a4c12b13b655aaf38abd",
+  "characterId": "6803a4a82b13b655aaf38abc",
   "message": ["user: Bună, ce mai faci astăzi?"]
 }
 ### de pus requesturi mai multe pentru a testa mai multe cazuri

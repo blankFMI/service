@@ -14,8 +14,8 @@ public class FilterConfig {
     public FilterRegistrationBean<Filter> tokenValidationFilter(SessionService sessionService) {
         FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new TokenValidationFilter(sessionService));
-        registrationBean.addUrlPatterns("/users/*"); // or "/*" if it applies to everything
-        registrationBean.setOrder(1); // Optional: define filter priority
+        registrationBean.addUrlPatterns("/*"); // Apply filter to all routes
+        registrationBean.setOrder(1); // Define filter priority
         return registrationBean;
     }
 }
