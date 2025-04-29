@@ -1,14 +1,87 @@
 pipeline {
+
     agent any
+
+    tools {
+        jdk 'jdk21'
+    }
+
     environment {
-        DOCKER_PASSWORD = credentials("docker_password")
+        DOCKER_CREDENTIALS = credentials("docker_credentials")
+        GITHUB_TOKEN = credentials("github_token")
+        GITHUB_ORGANIZATION_USERNAME = "FMI-ProductionEngineering-TRIFECTA"
+        JWT_SECRET_KEY = credentials("jwt_secret_key")
     }
 
     stages {
-        stage('Build & Test') {
+        stage('Add application.properties file') {
             steps {
-                sh './gradlew clean build'
+                writeFile(
+                    file: "${WORKSPACE}/src/main/resources/application.properties",
+                    text: """
+                            server.servlet.contextPath=/api
+                            spring.data.mongodb.auto-index-creation=true
+                            mongodb.connection.url=\${MONGODB_CONECTION_URL:mongodb://root:example@host.docker.internal:27017}
+                            security.jwt.secret-key=${JWT_SECRET_KEY}
+                          """.stripIndent()
+                )
             }
         }
+
+         stage('Build & Test') {
+            steps {
+                sh './gradlew clean build test testIT'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+              steps {
+                    script {
+                        sh([script: 'git fetch --tag', returnStdout: true]).trim()
+                        env.MAJOR_VERSION = sh([script: 'git tag | sort --version-sort | tail -1 | cut -d . -f 1', returnStdout: true]).trim()
+                        env.MINOR_VERSION = sh([script: 'git tag | sort --version-sort | tail -1 | cut -d . -f 2', returnStdout: true]).trim()
+                        env.PATCH_VERSION = sh([script: 'git tag | sort --version-sort | tail -1 | cut -d . -f 3', returnStdout: true]).trim()
+                        env.IMAGE_TAG = "${env.MAJOR_VERSION}.\$((${env.MINOR_VERSION} + 1)).${env.PATCH_VERSION}"
+
+                        sh """
+                            git tag ${env.IMAGE_TAG}
+                            git push https://${GITHUB_TOKEN}@github.com/${GITHUB_ORGANIZATION_USERNAME}/Abur.git ${env.IMAGE_TAG}
+                            docker build -t ${DOCKER_CREDENTIALS_USR}/hello-img:${env.IMAGE_TAG} .
+                            docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW} docker.io
+                            docker push ${DOCKER_CREDENTIALS_USR}/hello-img:${env.IMAGE_TAG}
+                        """
+                    }
+              }
+        }
+
+        stage('Create containers from the Docker Hub image') {
+            steps {
+                sh """
+                    IMAGE_TAG=${env.IMAGE_TAG} docker-compose up -d hello mongo ||
+                    IMAGE_TAG=${env.IMAGE_TAG} docker compose up -d hello mongo
+                """
+            }
+        }
+
+        stage('Push to Docker Hub') {
+              steps {
+                    script {
+                        GIT_TAG = sh([script: 'git fetch --tag && git tag', returnStdout: true]).trim()
+                        MAJOR_VERSION = sh([script: 'git tag | cut -d . -f 1', returnStdout: true]).trim()
+                        MINOR_VERSION = sh([script: 'git tag | cut -d . -f 2', returnStdout: true]).trim()
+                        PATCH_VERSION = sh([script: 'git tag | cut -d . -f 3', returnStdout: true]).trim()
+
+                        def NEW_MINOR = (MINOR_VERSION.toInteger() + 1).toString()
+                        IMAGE_VERSION = "${MAJOR_VERSION}.${NEW_MINOR}.${PATCH_VERSION}"
+
+                        sh """
+                            docker build -t ${DOCKER_CREDENTIALS_USR}/hello-img:${IMAGE_VERSION} .
+                            docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW} docker.io
+                            docker push ${DOCKER_CREDENTIALS_USR}/hello-img:${IMAGE_VERSION}
+                        """
+                    }
+              }
+        }
     }
+
 }

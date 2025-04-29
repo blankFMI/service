@@ -1,7 +1,6 @@
 services:
   hello:
-    image: hello-img
-    build: .
+    image: andrei137/hello-img:${IMAGE_TAG}
     ports:
       - 8080:8080
       # Port for debug
@@ -19,14 +18,23 @@ services:
       - 50000:50000
     restart: on-failure
     volumes:
+      - /usr/bin/touch:/usr/bin/touch
+      - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
       - /workspaces/jenkins_config:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+      - /$HOME/.docker/cli-plugins/docker-compose:/$HOME/.docker/cli-plugins/docker-compose
       - ./Dockerfile:/Dockerfile
-      - /usr/libexec/docker/cli-plugins/docker-compose:/usr/libexec/docker/cli-plugins/docker-compose
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+    privileged: true
     profiles:
       - "hello-service"
     user: 0:0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   mongo:
     image: mongo:6.0.20
     restart: always
