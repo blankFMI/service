@@ -45,30 +45,19 @@ Content-Type: application/json
 
 ###Logout as Basic User
 POST http://localhost:8080/auth/logout HTTP/1.1
-Authorization: Bearer 89b27ebe-9e4c-4a34-9f60-71e7bb926850
+Authorization: Bearer 56df7e28-de90-413b-9cae-de2ac8f00a68
 Content-Type: application/json
 
 ###Logout as Premium User
 POST http://localhost:8080/auth/logout HTTP/1.1
-Authorization: Bearer bee7ad2d-def3-477f-adb1-4ba919ea370e
+Authorization: Bearer 6a906eb0-5a8f-4f3a-b8ca-86ef2b159b8d
 Content-Type: application/json
 
 ### Get Secure Data
 GET http://localhost:8080/auth/secure-data HTTP/1.1
-Authorization: Bearer 89b27ebe-9e4c-4a34-9f60-71e7bb926850
+Authorization: Bearer 6a906eb0-5a8f-4f3a-b8ca-86ef2b159b8d
 Content-Type: application/json
 
-
-###Update Basic User
-PUT http://localhost:8080/users/67ec2e4811d90b6599f7a133
-Content-Type: application/json
-
-{
-  "username": "newUsername",
-  "email": "newemail@example.com",
-  "password": "newPassword",
-  "accountType": "PREMIUM"
-}
 
 ###Update User
 PUT http://localhost:8080/users/67ec34a211d90b6599f7a135

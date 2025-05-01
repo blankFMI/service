@@ -27,11 +27,11 @@ public class LoginController {
         // Find user by username
         User user = userRepository.findByUsername(loginRequest.getUsername());
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
         }
         // Check password (for demo purposes, comparing plain text; use hashing in production)
         if (!user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
         // Generate a simple token (UUID)
         String token = UUID.randomUUID().toString();
@@ -58,15 +58,15 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authorization) {
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing or invalid token");
         }
         String token = authorization.substring(7);
-
+    
         // Remove the token from the session store
         sessionService.removeTokenByValue(token);
-
+    
         return ResponseEntity.ok("Logged out successfully");
     }
 

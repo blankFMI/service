@@ -46,7 +46,7 @@ public class UserController {
     }
 
     //Endpoint to update a user profile
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUserProfile(@PathVariable String id, @RequestBody User updatedUser) {
         try {
             User user = userService.updateUser(id, updatedUser);
@@ -57,19 +57,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUserProfile2(@PathVariable String id, @RequestBody User updatedUser) {
-        try {
-            User user = userService.updateUser2(id, updatedUser);
-            return ResponseEntity.ok(user);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User not found with id: " + id);
-        }
-    }
-
     //Endpoint to upgrade a user profile
-    @PutMapping("/{id}")
+    @PutMapping("/upgrade/{id}")
     public ResponseEntity<?> upgradeUserProfile(@PathVariable String id, @RequestBody User upgratedUser) {
         try {
             User user = userService.upgradeUser(id, upgratedUser);
@@ -81,10 +70,10 @@ public class UserController {
     }
 
     //Endpoint to downgrade a user profile
-    @PutMapping("/{id}")
+    @PutMapping("/downgrade/{id}")
     public ResponseEntity<?> downgradeUserProfile(@PathVariable String id, @RequestBody User downgratedUser) {
         try {
-            User user = userService.upgradeUser(id, downgratedUser);
+            User user = userService.downgradeUser(id, downgratedUser);
             return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -93,7 +82,7 @@ public class UserController {
     }
 
     // Endpoint to delete a user
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
         try {
             userService.deleteUser(id);
