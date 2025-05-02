@@ -59,6 +59,13 @@ dependencies {
 	implementation "io.jsonwebtoken:jjwt-impl:$jwtVersion"
 	implementation "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
 
+	/* ---------- NEW: reactive stack ---------- */
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'  // brings in WebClient + Reactor
+
+    /* ---------- NEW: Resilience4j ---------- */
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'     // Reactor operators
+
 	// Lombok dependency
 	compileOnly "org.projectlombok:lombok:$lombokVersion"
 	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
