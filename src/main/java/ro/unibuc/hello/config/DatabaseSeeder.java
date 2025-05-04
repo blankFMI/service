@@ -29,6 +29,8 @@ public class DatabaseSeeder {
                     .password("secret")            // hash in real life!
                     .build()
             );
+
+            
         }
     }
 }
