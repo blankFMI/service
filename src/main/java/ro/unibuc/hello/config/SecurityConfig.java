@@ -21,8 +21,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated())
-            .addFilterBefore(new TokenValidationFilter(sessionService), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll());
+            // .addFilterBefore(new TokenValidationFilter(sessionService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
