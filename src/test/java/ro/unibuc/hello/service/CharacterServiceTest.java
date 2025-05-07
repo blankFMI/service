@@ -1,5 +1,5 @@
 package ro.unibuc.hello.service;
 
-public class ConfigurationService {
+public class CharacterServiceTest {
     
 }
