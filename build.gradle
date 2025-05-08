@@ -24,7 +24,7 @@ ext {
 }
 
 dependencies {
-	// Spring & core
+	//Spring & core
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.session:spring-session-core'
@@ -34,32 +34,34 @@ dependencies {
 	implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// Runtime
+	//Runtime
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
-	// Unit testing
+	//Unit testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.11.4"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
+
 
 	// Mockito & MongoDB test support
-	testImplementation 'org.mockito:mockito-core:4.0.0'
-	testImplementation 'org.mongodb:mongodb-driver-sync:5.0.1'
+	// testImplementation 'org.mockito:mockito-core:4.0.0'
+	// testImplementation 'org.mongodb:mongodb-driver-sync:5.0.1'
 
-	// Integration tests
-	testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
-	testImplementation "org.testcontainers:mongodb:${testcontainersVersion}"
+
+	// Integration tests - test containers dependencies
+    testImplementation "org.testcontainers:testcontainers:$testcontainersVersion"
+    testImplementation "org.testcontainers:mongodb:$testcontainersVersion"
 	testImplementation 'org.testcontainers:junit-jupiter'
 
-	// E2E tests with Cucumber
-	runtimeOnly "org.junit.vintage:junit-vintage-engine:${junitVersion}"
-	testImplementation "io.cucumber:cucumber-core:${cucumberVersion}"
-	testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
-	testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
-	testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
+	//	E2E tests
+	runtimeOnly "org.junit.vintage:junit-vintage-engine:$junitVersion"
+	testImplementation "io.cucumber:cucumber-core:$cucumberVersion"
+	testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
+	testImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
+	testImplementation "io.cucumber:cucumber-spring:$cucumberVersion"
 }
 
 dependencyManagement {
@@ -71,7 +73,7 @@ dependencyManagement {
 test {
 	outputs.dir snippetsDir
 	useJUnitPlatform {
-		excludeTags "IntegrationTest", "E2E"
+		excludeTags ("IntegrationTest", "E2E")
 	}
 	finalizedBy jacocoTestReport
 
@@ -115,10 +117,10 @@ task testE2E() {
 			mainClass.set("io.cucumber.core.cli.Main")
 			classpath(configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output)
 			args([
-				'--plugin', 'pretty',
-				'--plugin', 'html:target/cucumber-report.html',
-				'--glue', 'ro.unibuc.hello.e2e.steps',
-				'src/test/resources'])
+					'--plugin', 'pretty',
+					'--plugin', 'html:target/cucumber-report.html',
+					'--glue', 'ro.unibuc.hello.e2e.steps',
+					'src/test/resources'])
 		}
 	}
 }

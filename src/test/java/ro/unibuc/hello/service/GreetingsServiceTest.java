@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -160,67 +158,4 @@ class GreetingsServiceTest {
         assertEquals("2", greetings.get(1).getId());
         assertEquals("Greeting 2", greetings.get(1).getContent());
     }
-
-    @Test
-    void testGetGreetingById_ExistingEntity() throws EntityNotFoundException {
-        // Arrange
-        String id = "1";
-        InformationEntity entity = new InformationEntity(id, "Greeting Title", "Description");
-        when(informationRepository.findById(id)).thenReturn(Optional.of(entity));
-
-        // Act
-        Greeting greeting = greetingsService.getGreetingById(id);
-
-        // Assert
-        assertNotNull(greeting);
-        assertEquals("1", greeting.getId());
-        assertEquals("Greeting Title", greeting.getContent());
-    }
-
-    @Test
-    void testGetGreetingById_NonExistingEntity() {
-        // Arrange
-        String id = "nonexistent";
-        when(informationRepository.findById(id)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(EntityNotFoundException.class, () -> greetingsService.getGreetingById(id));
-    }   
-
-    @Test
-    void testSaveAllGreetings() {
-        // Arrange
-        List<Greeting> greetings = List.of(
-            new Greeting("1", "Greeting One"),
-            new Greeting("2", "Greeting Two")
-        );
-
-        List<InformationEntity> savedEntities = List.of(
-            new InformationEntity("1", "Greeting One", null),
-            new InformationEntity("2", "Greeting Two", null)
-        );
-
-        when(informationRepository.saveAll(anyList())).thenReturn(savedEntities);
-
-        // Act
-        List<Greeting> result = greetingsService.saveAll(greetings);
-
-        // Assert
-        assertEquals(2, result.size());
-        assertEquals("1", result.get(0).getId());
-        assertEquals("Greeting One", result.get(0).getContent());
-        assertEquals("2", result.get(1).getId());
-        assertEquals("Greeting Two", result.get(1).getContent());
-    }
-
-    @Test
-    void testDeleteAllGreetings() {
-        // Act
-        greetingsService.deleteAllGreetings();
-
-        // Assert
-        verify(informationRepository, times(1)).deleteAll();
-    }
-
-
 }

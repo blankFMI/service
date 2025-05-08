@@ -12,7 +12,6 @@ Content-Type: application/json
 ### Personality added
 POST http://localhost:8080/characters
 Content-Type: application/json
-
 {
   "name": "Alice",
   "background": "A cunning detective from the 1920s",
